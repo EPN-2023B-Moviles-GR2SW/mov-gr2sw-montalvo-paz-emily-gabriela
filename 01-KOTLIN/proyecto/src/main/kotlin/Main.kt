@@ -1,3 +1,5 @@
+import java.util.*
+
 fun main(args: Array<String>){
 
     println("Hello word")
@@ -12,14 +14,14 @@ fun main(args: Array<String>){
     var ejemploVariable = "Emily Montalvo"
     val edadEjemplo: Int = 12
     ejemploVariable.trim()
-    ejemploVariable=edadEjemplo
+    //ejemploVariable=edadEjemplo
 
 
     //VARIABLES PRIMITIVAS
     val nombreProfesor : String = "Adrian Eguez"
     val sueldo: Double = 1.2
-    val estadoCivil: Char = "C"
-    val mayorEdad: Boolen =  true
+    val estadoCivil: Char ='C'
+    val mayorEdad: Boolean =  true
     //Clases Java
     val fechaNacimiento : Date = Date()
 
@@ -35,7 +37,7 @@ fun main(args: Array<String>){
     }
 
     val esSoltero = (estadoCivilWhen == "S")
-    val coqueteo = if(esSoltero)"Si" else"No"
+    val coqueteo = if(esSoltero)"Si" else "No"
 
 
 
@@ -53,23 +55,79 @@ fun main(args: Array<String>){
     //Int -> Int?(nullable)
         //String -> String?(nullable)
         //Date -> Date?(nullable)
-        if(bonoEspecial == null){
-            return sueldo*(100/tasa)
+        return if(bonoEspecial == null){
+            sueldo*(100/tasa)
         } else {
-            return sueldo*(100/tasa)+bonoEspecial
+            sueldo*(100/tasa)+bonoEspecial
         }
     }
-
-
     calcularSueldo(10.00)
     calcularSueldo(10.00,15.00,20.00)
     calcularSueldo(10.00, bonoEspecial = 20.00) //Named Parameters
     calcularSueldo(bonoEspecial = 20.00, sueldo = 10.00, tasa = 15.00)//Parametros
 
 
+    val sumaUno = Suma(1,1)
+    val sumaDos = Suma(null, 1)
+    val sumaTres = Suma(1,null)
 
 
 
 
+}
+
+abstract class NumerosJava{
+    protected val numeroUno : Int
+    private val numeroDos : Int
+
+    constructor( uno:Int, dos:Int) { //Bloque de código de constructor
+        this.numeroUno = uno
+        this.numeroDos = dos
+        println("Inicializando")
+    }
+
+
+
+}
+
+abstract class NumerosKotlin( //Constructor primario
+    //Ejemplo
+    // uno: Int, (Parametro(sin modificar de acceso))
+    //private var uno: Int, //Propiedad Publica Clase numeroskotlin.uno
+    // var uno: Int, //Porpiedad de la clase (por defecto es public)
+    //public var uno: Int
+    protected val numeroUno : Int, //Propiedad de la clase protected numeroskotlin.numeroUno
+    protected val numeroDos : Int //Propiedad de la clase protected numeroskotlin.numeroDos
+){
+    init{ //blque constructor primario
+        //this.numeroUno; this.numeroDos  ; //El this es opcional, no es requerido
+        numeroDos; numeroUno; //Sin el this, es lo mismo
+        println("INICIALIZANDO")
+    }
+}
+
+class Suma( //Constructor primario SUMA
+    unoParametro:Int, //Parametro
+    dosParametro: Int, //Parametro
+): NumerosKotlin(unoParametro, dosParametro){ //Extendiendo y mandando los parametros (super)
+    init { //Bloque codigo constructor primario
+        this.numeroUno
+        this.numeroDos
+    }
+    constructor(
+        uno: Int?,
+        dos: Int
+    ):this(
+        if (uno== null) 0 else uno,
+        dos
+    )
+
+    constructor(
+        uno: Int,
+        dos: Int?
+    ):this(
+        uno,
+        if (dos==null)0 else dos
+    )
 
 }
