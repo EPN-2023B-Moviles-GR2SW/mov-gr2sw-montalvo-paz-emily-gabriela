@@ -70,13 +70,67 @@ fun main(args: Array<String>){
     val sumaUno = Suma(1,1)
     val sumaDos = Suma(null, 1)
     val sumaTres = Suma(1,null)
+    val sumaCuatro = Suma(null,null)
+    sumaUno.sumar()
+    sumaDos.sumar()
+    sumaTres.sumar()
+    sumaCuatro.sumar()
 
+    println(Suma.pi)
+    println(Suma.elevarAlCuadrado(2))
+    println(Suma.historialSumas)
 
+    val arregloEstatico : Array<Int> = arrayOf<Int>(1,2,3)
+    println(arregloEstatico)
+
+    val arregloDinamico : ArrayList<Int> = arrayListOf<Int>(1,2,3,4,5,6,7,8,9,10)
+    println(arregloDinamico)
+    arregloDinamico.add(11)
+    arregloDinamico.add(12)
+    println(arregloDinamico)
+
+    //FOR EACH -> Unit
+    //Iterar un arreglo
+    val respuestaForEach: Unit = arregloDinamico.forEach { valorActual: Int ->
+        println("Valor actual: ${valorActual}")
+    }
+
+    arregloDinamico.forEach{ println("Valor actual: ${it}") } //Esto solo sirve cuando tengo un parametro
+
+    arregloEstatico.forEachIndexed { index:Int, valorActual:Int ->
+        println("Valor ${valorActual} - Indice: ${index}")
+    }
+
+    println(respuestaForEach)
+
+    //MAP -> Muta el arreglo (cambia el arreglo)
+    //1. Envirmos el nuevo valos de la iteracion
+    //2. Nos devuelve un NUEVO ARREGLO con los valores modificados
+
+    val respuestaMap : List<Double> = arregloDinamico.map {
+        valorActual:Int -> return@map valorActual.toDouble()+100.00
+    }
+    println(respuestaMap)
+    val respuestaMapDos = arregloDinamico.map{it+15}
+    println(respuestaMapDos)
+    //Filter ->  FILTRAR EL ARREGLO
+    //1. DEVOLVER una expresion TRUE or FALSE
+    //2. Nuevo arreglo filtrado
+
+    val respuestFilter : List<Int> = arregloDinamico.filter {
+        valorActual: Int -> val mayoresACinco: Boolean = valorActual > 5
+        return@filter mayoresACinco
+    }
+    println(respuestFilter)
+    val respuestFilterDos = arregloDinamico.filter { it<=5 }
+    println(respuestFilterDos)
 
 
 }
 
-abstract class NumerosJava{
+// CLASES
+
+abstract class NumerosJava{  //Como seria una clase en Java
     protected val numeroUno : Int
     private val numeroDos : Int
 
@@ -85,12 +139,10 @@ abstract class NumerosJava{
         this.numeroDos = dos
         println("Inicializando")
     }
-
-
-
 }
 
-abstract class NumerosKotlin( //Constructor primario
+
+abstract class NumerosKotlin( //Clase en Kotlin //Constructor primario
     //Ejemplo
     // uno: Int, (Parametro(sin modificar de acceso))
     //private var uno: Int, //Propiedad Publica Clase numeroskotlin.uno
@@ -114,33 +166,22 @@ class Suma( //Constructor primario SUMA
         this.numeroUno
         this.numeroDos
     }
-    constructor(
-        uno: Int?,
-        dos: Int
-    ):this(
+    constructor( uno: Int?, dos: Int ):this(
         if (uno== null) 0 else uno,
         dos
     )
-
-    constructor(
-        uno: Int,
-        dos: Int?
-    ):this(
+    constructor( uno: Int, dos: Int? ):this(
         uno,
         if (dos == null) 0 else dos
     )
-
-    constructor(
-        uno: Int?,
-        dos: Int?
-    ):this(
+    constructor( uno: Int?, dos: Int? ):this(
         if (uno == null) 0 else uno,
         if (dos == null) 0 else uno
     )
 
+    //Funciones de clase Suma
 
     // public por defecto, o usar private o protected
-
     public fun sumar (): Int {
         val total = numeroUno + numeroDos
         agregarHistorial(total)
