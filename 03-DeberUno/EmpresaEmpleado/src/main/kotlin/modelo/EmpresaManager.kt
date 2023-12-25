@@ -1,10 +1,10 @@
 package modelo
-
+import ArchivosManager
 import modelo.entidades.Empleado
 import modelo.entidades.Empresa
 import java.io.*
 
-class EmpresaManager(private val empresas: MutableList<Empresa>) {
+class EmpresaManager(private val empresas: MutableList<Empresa>, private val archivosManager: ArchivosManager) {
 
     fun listarEmpresas() {
         if (empresas.isEmpty()) {
@@ -15,6 +15,7 @@ class EmpresaManager(private val empresas: MutableList<Empresa>) {
         }
         println("**********************************")
         println("EMPRESAS REGISTRADAS:")
+
         empresas.forEachIndexed { index, empresa ->
             println("${index + 1}. ${empresa.nombreEmpresa}")
         }
@@ -47,6 +48,7 @@ class EmpresaManager(private val empresas: MutableList<Empresa>) {
 
         val nuevaEmpresa = Empresa(nombre, numEmpleados, ingresoAnual, ubicacion, esInternacional)
         empresas.add(nuevaEmpresa)
+        archivosManager.guardarDatosEnArchivo(empresas)
 
         println("Nueva empresa creada correctamente.")
     }
@@ -102,7 +104,7 @@ class EmpresaManager(private val empresas: MutableList<Empresa>) {
 
         val nuevoEmpleado = Empleado(nombre, apellido, tiempoCompleto, salario, numVacaciones)
         empresa.listaEmpleados.add(nuevoEmpleado)
-
+        archivosManager.guardarDatosEnArchivo(empresas)
         println("Empleado agregado correctamente.")
     }
 
@@ -135,7 +137,7 @@ class EmpresaManager(private val empresas: MutableList<Empresa>) {
             print("Nuevo número de vacaciones: ")
             empleadoSeleccionado.numeroVacaciones = readLine()?.toIntOrNull()
                 ?: empleadoSeleccionado.numeroVacaciones
-
+            archivosManager.guardarDatosEnArchivo(empresas)
             println("Empleado actualizado correctamente.")
         } else if (seleccion != null && seleccion == 0) {
             // Cancelar la operación
@@ -161,6 +163,7 @@ class EmpresaManager(private val empresas: MutableList<Empresa>) {
         if (seleccion != null && seleccion in 1..empresa.listaEmpleados.size) {
             val empleadoSeleccionado = empresa.listaEmpleados[seleccion - 1]
             empresa.listaEmpleados.remove(empleadoSeleccionado)
+            archivosManager.guardarDatosEnArchivo(empresas)
             println("Empleado eliminado correctamente.")
         } else if (seleccion != null && seleccion == 0) {
             // Cancelar la operación

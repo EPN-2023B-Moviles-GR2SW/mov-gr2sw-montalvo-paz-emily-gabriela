@@ -1,0 +1,45 @@
+Nombre Empresa: EmiImport
+Número Empleados: 67
+Ingreso Anual: 456.78
+Ubicación: frahg
+Es Internacional: No
+  Nombre Empleado: Emily
+  Apellido Empleado: Montalvo
+  Empleado Tiempo Completo: No
+  Salario: 3345.0
+  Días Vacaciones: 2
+  Nombre Empleado: Danilo 
+  Apellido Empleado: Montalvo
+  Empleado Tiempo Completo: Sí
+  Salario: 23.0
+  Días Vacaciones: 3
+
+Nombre Empresa: HeidyImport
+Número Empleados: 67
+Ingreso Anual: 456.78
+Ubicación: frahg
+Es Internacional: No
+
+Nombre Empresa: MariaImport
+Número Empleados: 67
+Ingreso Anual: 456.78
+Ubicación: frahg
+Es Internacional: No
+  Nombre Empleado: Camila
+  Apellido Empleado: Vallejo
+  Empleado Tiempo Completo: No
+  Salario: 45.0
+  Días Vacaciones: 4
+
+Nombre Empresa: pepeimport
+Número Empleados: 6
+Ingreso Anual: 34.54
+Ubicación: erer
+Es Internacional: Sí
+
+Nombre Empresa: Nueva Importa
+Número Empleados: 4
+Ingreso Anual: 345.0
+Ubicación: frad
+Es Internacional: No
+
