@@ -126,6 +126,36 @@ fun main(args: Array<String>){
     println(respuestFilterDos)
 
 
+    // OR AND
+    //OR - ALGUNO CUMPLE?
+    // AND - TODOS CUMPLEN?
+
+    val respuestaAny : Boolean = arregloDinamico.any{
+        valorActual : Int ->
+        return@any (valorActual>5)
+    }
+    println(respuestaAny) //true
+
+    val respuestaAll : Boolean = arregloDinamico.all{
+            valorActual : Int ->
+        return@all (valorActual>5)
+    }
+    println(respuestaAll) //false
+
+    //REDUCE -> VALOR ACUMULADO
+    // Valor acumulado = 0 (Siempre 0 en lenguaje Kotlin)
+    //[1,2,3,4,5] -> Sumeme todos los valores del arreglo
+    // valorItercion1 = valorEmpieza + 1  = 0+1 = 1 -> Iteración1
+    // valorItercion2 = valorIteración1 + 2  = 1+2 = 3 -> Iteración2
+    // valorItercion3 = valorIteración2 + 3  = 3+3 = 6 -> Iteración3
+    // valorItercion4 = valorIteración3 + 4  = 6+4 = 10 -> Iteración4
+    // valorItercion5 = valorIteración4 + 5  = 10+5 = 15 -> Iteración5
+
+    val respuestaReduce : Int = arregloDinamico.reduce{
+        acumulado : Int, valorActual : Int -> return@reduce(acumulado+valorActual)// Logica del negocio
+    }
+    println(respuestaReduce) //78
+
 }
 
 // CLASES
