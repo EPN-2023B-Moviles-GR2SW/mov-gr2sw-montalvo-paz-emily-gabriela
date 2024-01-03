@@ -1,5 +1,6 @@
 package com.example.b2023gr2sw
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ContextMenu
@@ -9,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 
 class BListView : AppCompatActivity() {
@@ -29,6 +31,7 @@ class BListView : AppCompatActivity() {
         botonAnadirListView.setOnClickListener { //click
             añadirEntrenador(adaptador)
         }
+        registerForContextMenu(listView)
 
     }
     fun añadirEntrenador(adaptador: ArrayAdapter<BEntrenador>) {
@@ -59,12 +62,40 @@ class BListView : AppCompatActivity() {
             }
             R.id.mi_eliminar -> {
                 mostrarSnackbar ("${posicionItemSeleccionado}")
-                //abrirDialogo()
+                abrirDialogo()
                 return true
             }
             else -> super.onContextItemSelected(item)
         }
     }
+
+    fun abrirDialogo() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Desea ELIMINAR")
+        builder.setPositiveButton(
+            "Aceptar",
+            DialogInterface.OnClickListener{dialog, which ->
+                mostrarSnackbar("Acepto ${which}")
+            }
+        )
+        builder.setNegativeButton(
+            "Cancelar", null
+        )
+        val opciones = resources.getStringArray(
+            R.array.string_array_opciones_dialogo
+        )
+        val seleccionPrevia = booleanArrayOf(
+            true, //Lunes seleccionado
+            false, //Martes no seleccionado
+            false // Miércoles no seleccionado
+        )
+        builder.setMultiChoiceItems(opciones, seleccionPrevia,
+            {dialog, which, isCheck -> mostrarSnackbar("Acepto ${which}")}
+        )
+        val dialogo = builder.create()
+        dialogo.show()
+    }
+
     fun mostrarSnackbar(texto:String){
         val snack = Snackbar.make(findViewById(R.id.lv_list_view), texto, Snackbar.LENGTH_LONG)
         snack.show()
