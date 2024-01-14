@@ -155,7 +155,6 @@ fun main(args: Array<String>){
         acumulado : Int, valorActual : Int -> return@reduce(acumulado+valorActual)// Logica del negocio
     }
     println(respuestaReduce) //78
-
 }
 
 // CLASES

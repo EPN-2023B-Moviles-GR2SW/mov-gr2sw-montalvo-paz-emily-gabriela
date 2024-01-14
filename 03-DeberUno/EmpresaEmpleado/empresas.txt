@@ -6,12 +6,7 @@ Es Internacional: No
   Nombre Empleado: Emily
   Apellido Empleado: Montalvo
   Empleado Tiempo Completo: No
-  Salario: 3345.0
-  Días Vacaciones: 2
-  Nombre Empleado: Danilo 
-  Apellido Empleado: Montalvo
-  Empleado Tiempo Completo: Sí
-  Salario: 23.0
+  Salario: 450.0
   Días Vacaciones: 3
 
 Nombre Empresa: HeidyImport
@@ -25,21 +20,39 @@ Número Empleados: 67
 Ingreso Anual: 456.78
 Ubicación: frahg
 Es Internacional: No
-  Nombre Empleado: Camila
-  Apellido Empleado: Vallejo
-  Empleado Tiempo Completo: No
-  Salario: 45.0
-  Días Vacaciones: 4
 
 Nombre Empresa: pepeimport
 Número Empleados: 6
 Ingreso Anual: 34.54
 Ubicación: erer
-Es Internacional: Sí
+Es Internacional: No
 
 Nombre Empresa: Nueva Importa
 Número Empleados: 4
 Ingreso Anual: 345.0
 Ubicación: frad
 Es Internacional: No
+
+Nombre Empresa: Distribuidora Monar
+Número Empleados: 2
+Ingreso Anual: 5000.0
+Ubicación: Shyris
+Es Internacional: No
+
+Nombre Empresa: Distribuida Enriquez
+Número Empleados: 1
+Ingreso Anual: 456.0
+Ubicación: FranciscoPacheco
+Es Internacional: No
+
+Nombre Empresa: Banco Procredit
+Número Empleados: 3
+Ingreso Anual: 6000.0
+Ubicación: Amazonas
+Es Internacional: Sí
+  Nombre Empleado: Pedro
+  Apellido Empleado: Alvarado
+  Empleado Tiempo Completo: Sí
+  Salario: 5000.0
+  Días Vacaciones: 30
 

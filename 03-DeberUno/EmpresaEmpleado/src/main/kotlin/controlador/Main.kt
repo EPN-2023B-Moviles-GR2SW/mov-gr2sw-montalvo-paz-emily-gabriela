@@ -3,7 +3,6 @@ package controlador
 import ArchivosManager
 import modelo.EmpresaManager
 import modelo.EmpresaMenu
-import modelo.entidades.Empresa
 
 fun main() {
     val archivosManager = ArchivosManager("empresas.txt")
