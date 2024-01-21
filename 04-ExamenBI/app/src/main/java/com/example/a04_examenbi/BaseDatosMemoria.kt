@@ -5,7 +5,7 @@ class BaseDatosMemoria {
     companion object{
         val empresas = arrayListOf<BEmpresa>()
 
-        /////////////////////// CRUD DE EMPRESAS /////////////////////
+        //Empresas
         fun crearEmpresa(empresa: BEmpresa){
             empresas.add(empresa)
         }
@@ -25,7 +25,7 @@ class BaseDatosMemoria {
             if(empresa != null){
                 println("Empresa seleccionada: $empresa")
                 empresas[id] = empresaActualizada
-                println("Empresa actualizada: $empresa")
+                println("Empresa actualizada: $empresaActualizada")
             }else{
                 println("Empresa no encontrada: ${id}")
             }
@@ -44,7 +44,7 @@ class BaseDatosMemoria {
             }
         }
 
-        /////////////////////// CRUD EMPLEADOS //////////////////////////////////
+        // EMPLEADOS
         fun cargarEmpleados(empresa: BEmpresa):MutableList<BEmpleado>{
             var listaEmpleados: MutableList<BEmpleado> = mutableListOf();
             for(id in empresa.empleados.indices){
@@ -88,7 +88,7 @@ class BaseDatosMemoria {
                     println("Empleado eliminado")
                     return true;
                 }else{
-                    println("Empresa no enocntrada");
+                    println("Empresa no encontrada");
                     return false;
                 }
             }else{
@@ -97,27 +97,90 @@ class BaseDatosMemoria {
             }
         }
 
-
-
-
-
         init {
-            empresas.add(BEmpresa(
-                        "Procredit",
-                99599046,
-                true,
-                "Financiera",
-                empleados = mutableListOf(
-                            BEmpleado(
-                                "Emily",
-                                "Montalvo",
-                                48,
-                                true
-                            )
+            empresas.add(
+                BEmpresa(
+                    "Procredit",
+                    99599046,
+                    true,
+                    "Financiera",
+                    empleados = mutableListOf(
+                        BEmpleado(
+                            "Emily",
+                            "Montalvo",
+                            48,
+                            true
+                        ),
+                        BEmpleado(
+                            "John",
+                            "Doe",
+                            30,
+                            true
                         )
                     )
                 )
+            )
 
+            empresas.add(
+                BEmpresa(
+                    "TechCorp",
+                    98765432,
+                    true,
+                    "Tecnología",
+                    empleados = mutableListOf(
+                        BEmpleado(
+                            "Alice",
+                            "Johnson",
+                            25,
+                            true
+                        ),
+                        BEmpleado(
+                            "Bob",
+                            "Smith",
+                            35,
+                            true
+                        ),
+                        BEmpleado(
+                            "Charlie",
+                            "Brown",
+                            28,
+                            true
+                        )
+                    )
+                )
+            )
+
+            empresas.add(
+                BEmpresa(
+                    "FoodExpress",
+                    91234567,
+                    true,
+                    "Alimentación",
+                    empleados = mutableListOf(
+                        BEmpleado(
+                            "Eva",
+                            "Gonzalez",
+                            22,
+                            true
+                        ),
+                        BEmpleado(
+                            "David",
+                            "Clark",
+                            40,
+                            true
+                        ),
+                        BEmpleado(
+                            "Sophia",
+                            "Taylor",
+                            32,
+                            true
+                        )
+                    )
+                )
+            )
         }
+
     }
+
+
 }

@@ -63,28 +63,35 @@
         android:id="@+id/input_jornada_empleado"
         android:layout_width="255dp"
         android:layout_height="48dp"
+        android:layout_marginBottom="244dp"
         android:ems="10"
         android:hint="¿Tiempo Completo?"
         android:inputType="text"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="440dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_guardar_empleado"
-        android:layout_width="124dp"
-        android:layout_height="40dp"
+        android:layout_width="115dp"
+        android:layout_height="66dp"
+        android:layout_marginBottom="116dp"
         android:backgroundTint="#00BCD4"
         android:text="Guardar"
-        tools:layout_editor_absoluteX="68dp"
-        tools:layout_editor_absoluteY="559dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_calcelar_empleado"
+        app:layout_constraintHorizontal_bias="0.568"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_calcelar_empleado"
-        android:layout_width="121dp"
-        android:layout_height="41dp"
+        android:layout_width="124dp"
+        android:layout_height="68dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="112dp"
         android:backgroundTint="#00BCD4"
         android:text="Cancelar"
-        tools:layout_editor_absoluteX="225dp"
-        tools:layout_editor_absoluteY="556dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

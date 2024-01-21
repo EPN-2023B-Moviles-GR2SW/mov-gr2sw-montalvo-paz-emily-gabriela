@@ -11,115 +11,100 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
+import com.example.a04_examenbi.BaseDatosMemoria.Companion.eliminarEmpresa
 
 class EmpresaHome : AppCompatActivity() {
 
     lateinit var adaptador: ArrayAdapter<String>;
-    lateinit var empleados:MutableList<BEmpleado>;
-    private  var posicionEmpleadoSeleccionado = -1
-    var empresaId =-1;
+    var posicionEmpresaSeleccionada = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_empresa_home)
 
-        val botonAgregarEmpleado = findViewById<Button>(R.id.btn_agregar_empleado)
-        botonAgregarEmpleado.setOnClickListener{
-            irActividad(FormAgregarEmpleado::class.java)
+        val botonCrearEmpresa = findViewById<Button>(R.id.btn_crear_empresa)
+        botonCrearEmpresa.setOnClickListener {
+            irActividad(FormCrearEmpresa::class.java)
         }
+        actualizarListaEmpresas();
 
-        empresaId = intent.getIntExtra("empresaId",-1)
-
-        actualizarListaEmpleados();
     }
-    private fun actualizarListaEmpleados() {
-        var empresa =  BaseDatosMemoria.buscarEmpresa(empresaId)!!;
-        empleados = BaseDatosMemoria.cargarEmpleados(empresa);
-        val listaEmpleados = findViewById<ListView>(R.id.lv_empleados)
+
+    private fun actualizarListaEmpresas() {
+        val listViewEmpresas = findViewById<ListView>(R.id.lv_lista_empresa)
         adaptador = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
-            empleados.mapIndexed { index, empleado ->
-                "${empleado.nombreEmpleado}"
+            BaseDatosMemoria.empresas.mapIndexed { index, empresa ->
+                "${empresa.nombreEmpresa}"
             }
         )
-        listaEmpleados.adapter = adaptador;
+        listViewEmpresas.adapter = adaptador;
         adaptador.notifyDataSetChanged();
-        registerForContextMenu(listaEmpleados);
+        registerForContextMenu(listViewEmpresas)
     }
-
     override fun onCreateContextMenu(
         menu: ContextMenu?,
         v: View?,
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        var inflater = menuInflater
-        inflater.inflate(R.menu.menu_empleados, menu)
-        val informacionEmpleado = menuInfo as AdapterView.AdapterContextMenuInfo;
-        val posicionEmpleado = informacionEmpleado.position;
-        if(posicionEmpleado != null){
-            posicionEmpleadoSeleccionado = posicionEmpleado;
-        }
-
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_empresa, menu)
+        val informacion = menuInfo as AdapterView.AdapterContextMenuInfo
+        val posicion = informacion.position
+        posicionEmpresaSeleccionada = posicion
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.mi_editar_empleado->{
-                try {
-                    val empleadoId = posicionEmpleadoSeleccionado;
-                    irActividad(FormAgregarEmpleado::class.java, empleadoId, empresaId)
-                }catch (e: Throwable){}
-                return true;
 
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.mi_ver_empleados -> {
+                val empresaId = posicionEmpresaSeleccionada
+                irActividad(EmpleadoHome::class.java, empresaId)
+                true
             }
-            R.id.mi_eliminar_empleado ->{
-                eliminar()
-                return true
+            R.id.mi_editar_empresa -> {
+                val empresaId = posicionEmpresaSeleccionada
+                irActividad(FormCrearEmpresa::class.java, empresaId)
+                true
+            }
+            R.id.mi_eliminar_empresa -> {
+                eliminar();
+                true
             }
             else -> super.onContextItemSelected(item)
         }
     }
 
-
-
-    fun irActividad(clase:Class<*>){
-        val intent = Intent(this,clase);
-        intent.putExtra("empresaId",empresaId);
-        actualizarListaEmpleados()
-        startActivity(intent)
+    private fun eliminar() {
+        val empresaSeleccionada = BaseDatosMemoria.empresas.getOrNull(posicionEmpresaSeleccionada)
+        if (empresaSeleccionada != null) {
+            val mensajeEliminar = AlertDialog.Builder(this)
+            mensajeEliminar.setTitle("¿Desea eliminar la empresa ${empresaSeleccionada.nombreEmpresa}?")
+            mensajeEliminar.setNegativeButton("Cancelar", null)
+            mensajeEliminar.setPositiveButton("Eliminar") { _, _ ->
+                if (BaseDatosMemoria.eliminarEmpresa(posicionEmpresaSeleccionada)) {
+                    actualizarListaEmpresas()
+                }
+            }
+            val dialog = mensajeEliminar.create()
+            dialog.show()
+        }
     }
 
-    fun irActividad(clase:Class<*>,empleadoId:Int?,empresaId: Int?) {
+    fun irActividad(clase: Class<*>, empresaId: Int = -1) {
         val intent = Intent(this, clase)
-        intent.putExtra("empleadoId", empleadoId)
         intent.putExtra("empresaId", empresaId)
         startActivity(intent)
     }
-
-    fun eliminar(){
-        val builderDialog = AlertDialog.Builder(this)
-        builderDialog.setTitle("¿Deseas eliminar al empleado?")
-        builderDialog.setNegativeButton("Cancelar",null);
-        builderDialog.setPositiveButton("Eliminar"){
-                dialog,_ ->
-            if(posicionEmpleadoSeleccionado.let { BaseDatosMemoria.eliminarEmpleado(empresaId, it) }){
-                actualizarListaEmpleados()
-            }
-        }
-        val dialog = builderDialog.create();
-        dialog.show();
-    }
-
     override fun onRestart() {
         super.onRestart()
-        actualizarListaEmpleados()
+        actualizarListaEmpresas()
     }
 
     override fun onResume() {
         super.onResume()
-        actualizarListaEmpleados()
+        actualizarListaEmpresas()
     }
-
 
 }
