@@ -3,6 +3,7 @@ package com.example.a04_examenbi
 class BaseDatosMemoria {
 
     companion object{
+        var tablaEmpresa : SQLiteHelper? = null
         val empresas = arrayListOf<BEmpresa>()
 
         //Empresas
