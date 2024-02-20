@@ -106,6 +106,11 @@ class MainActivity : AppCompatActivity() {
         botonGoogleMaps.setOnClickListener{
             irActividad(GGoogleMapsActivity:: class.java)
         }
+
+        val botonFirebaseUI = findViewById<Button>(R.id.btn_intent_firebase_ui)
+        botonFirebaseUI.setOnClickListener{
+            irActividad(HFireBaseUIAuth:: class.java)
+        }
     }
 
     fun abrirActividadConParametros(clase: Class<*>) {
@@ -115,7 +120,6 @@ class MainActivity : AppCompatActivity() {
         intentExplicito.putExtra("apellido", "Eguez")
         intentExplicito.putExtra("edad", 34)
         callbackContenidoIntenExplicito.launch(intentExplicito)
-
     }
 
     fun irActividad(
