@@ -16,6 +16,12 @@
         android:theme="@style/Theme.AppCompat.Light"
         tools:targetApi="31">
         <activity
+            android:name=".ICities"
+            android:exported="false" />
+        <activity
+            android:name=".IFireStore"
+            android:exported="false" />
+        <activity
             android:name=".HFireBaseUIAuth"
             android:exported="false" />
         <activity
