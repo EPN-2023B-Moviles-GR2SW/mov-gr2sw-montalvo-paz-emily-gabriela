@@ -83,7 +83,7 @@ class IFireStore : AppCompatActivity() {
             }
             .addOnFailureListener { }
     }
-    
+
     private fun consultarCiudades(
         adaptador: ArrayAdapter<ICities>
     ) {
