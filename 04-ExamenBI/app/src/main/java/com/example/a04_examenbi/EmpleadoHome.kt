@@ -100,11 +100,8 @@ class EmpleadoHome : AppCompatActivity() {
         builderDialog.setPositiveButton("Eliminar") { dialog, _ ->
             if (posicionEmpleadoSeleccionado != -1) {
                 BaseDatosMemoria.eliminarEmpleado(empresaId.toString(), empleados[posicionEmpleadoSeleccionado].id.toString()) { success, error ->
-                    if (success) {
-                        actualizarListaEmpleados()
-                    } else {
-                        // Manejar error al eliminar empleado
-                    }
+                    if (success) actualizarListaEmpleados()
+
                 }
             }
         }
