@@ -58,7 +58,7 @@ class BaseDatosMemoria {
         }
 
 
-        fun eliminarEmpresa(empresaId: String) {
+        fun eliminarEmpresa(empresaId: String, param: (Any, Any) -> Unit) {
             val db = Firebase.firestore
             val empresasRef = db.collection("empresas")
             empresasRef.document(empresaId).delete()
@@ -144,6 +144,7 @@ class BaseDatosMemoria {
                     callback(false, "Error al eliminar empleado: $e")
                 }
         }
+
 
 
         init {

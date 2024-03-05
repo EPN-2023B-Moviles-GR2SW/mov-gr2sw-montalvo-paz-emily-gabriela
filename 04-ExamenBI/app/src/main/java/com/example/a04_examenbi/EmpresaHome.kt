@@ -1,5 +1,7 @@
 package com.example.a04_examenbi
 
+import EmpleadoHome
+import FormCrearEmpresa
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,7 +13,6 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
-import com.example.a04_examenbi.BaseDatosMemoria.Companion.eliminarEmpresa
 
 class EmpresaHome : AppCompatActivity() {
 
@@ -83,14 +84,23 @@ class EmpresaHome : AppCompatActivity() {
             mensajeEliminar.setTitle("¿Desea eliminar la empresa ${empresaSeleccionada.nombreEmpresa}?")
             mensajeEliminar.setNegativeButton("Cancelar", null)
             mensajeEliminar.setPositiveButton("Eliminar") { _, _ ->
-                if (BaseDatosMemoria.eliminarEmpresa(posicionEmpresaSeleccionada)) {
-                    actualizarListaEmpresas()
+                val empresaId = empresaSeleccionada.id // Suponiendo que BEmpresa tiene un atributo id
+                if (empresaId != null) {
+                    BaseDatosMemoria.eliminarEmpresa(empresaId) { success, error ->
+                        if (success as Boolean) {
+                            actualizarListaEmpresas()
+                        } else {
+                            // Manejar error al eliminar empresa
+                        }
+                    }
                 }
             }
             val dialog = mensajeEliminar.create()
             dialog.show()
         }
     }
+
+
 
     fun irActividad(clase: Class<*>, empresaId: Int = -1) {
         val intent = Intent(this, clase)
