@@ -1,6 +1,7 @@
 package com.example.a04_examenbi
 
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 
 class BaseDatosMemoria {
@@ -70,61 +71,80 @@ class BaseDatosMemoria {
         }
 
         // EMPLEADOS
-        fun cargarEmpleados(empresa: BEmpresa):MutableList<BEmpleado>{
+        fun cargarEmpleados(empresaId: String, callback: (List<BEmpleado>?, error: String?) -> Unit) {
             val db = Firebase.firestore
-            var listaEmpleados: MutableList<BEmpleado> = mutableListOf();
-            for(id in empresa.empleados.indices){
-                println("${id}: ${empresa.empleados.get(id)}");
-                listaEmpleados.add(empresa.empleados.get(id))
-            }
-            return listaEmpleados;
-        }
-
-        fun agregarEmpleado(empresaId: Int, empleado: BEmpleado){
-            val db = Firebase.firestore
-            val empresa = empresas.getOrNull(empresaId);
-            if(empresa != null){
-                empresa.empleados.add(empleado);
-                println("Empleado Agregado '${empresa.nombreEmpresa}'.")
-            }else{
-                println("Empresa no Encontrada con:  ${empresaId}");
-            }
-        }
-
-        fun actualizarEmpleado(empresaId: Int,empleadoId: Int, empleadoActualizado: BEmpleado){
-            val db = Firebase.firestore
-            val empresa = empresas.getOrNull(empresaId);
-            if(empresa != null){
-                val empleado = empresa.empleados.getOrNull(empleadoId);
-                if(empleado != null){
-                    empresa.empleados[empleadoId] = empleadoActualizado;
-                }else{
-                    println("Empleado no encontrado con id: ${empleadoId}'.")
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val empresa = document.toObject(BEmpresa::class.java)
+                        callback(empresa?.empleados, null)
+                    } else {
+                        callback(null, "Empresa no encontrada: $empresaId")
+                    }
                 }
-            }else{
-                println("Empresa no encontrada con id:  ${empresaId}");
-            }
-        }
-
-
-        fun eliminarEmpleado(empresId:Int, empleadoId:Int ):Boolean{
-            val db = Firebase.firestore
-            val empresa = empresas.getOrNull(empresId);
-            if(empresa != null){
-                val empleado = empresa.empleados.getOrNull(empleadoId);
-                if(empleado != null){
-                    empresa.empleados.remove(empleado);
-                    println("Empleado eliminado")
-                    return true;
-                }else{
-                    println("Empresa no encontrada");
-                    return false;
+                .addOnFailureListener { e ->
+                    callback(null, "Error al cargar empleados: $e")
                 }
-            }else{
-                println("Empresa no encontrada");
-                return false;
-            }
         }
+
+
+        fun agregarEmpleado(empresaId: String, empleado: BEmpleado, callback: (Boolean, error: String?) -> Unit) {
+            val db = Firebase.firestore
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).update("empleados", FieldValue.arrayUnion(empleado))
+                .addOnSuccessListener {
+                    callback(true, null)
+                }
+                .addOnFailureListener { e ->
+                    callback(false, "Error al agregar empleado: $e")
+                }
+        }
+
+        fun actualizarEmpleado(empresaId: String, empleado: BEmpleado, empleadoActualizado: BEmpleado, callback: (Boolean, error: String?) -> Unit) {
+            val db = Firebase.firestore
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val empresa = document.toObject(BEmpresa::class.java)
+                        empresa?.empleados?.let { empleados ->
+                            val empleadoExistente = empleados.find { it.nombreEmpleado == empleado.nombreEmpleado && it.apellidoEmpleado == empleado.apellidoEmpleado }
+                            if (empleadoExistente != null) {
+                                empleados[empleados.indexOf(empleadoExistente)] = empleadoActualizado
+                                empresasRef.document(empresaId).update("empleados", empleados)
+                                    .addOnSuccessListener {
+                                        callback(true, null)
+                                    }
+                                    .addOnFailureListener { e ->
+                                        callback(false, "Error al actualizar empleado: $e")
+                                    }
+                            } else {
+                                callback(false, "Empleado no encontrado en la empresa")
+                            }
+                        }
+                    } else {
+                        callback(false, "Empresa no encontrada: $empresaId")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    callback(false, "Error al actualizar empleado: $e")
+                }
+        }
+
+
+        fun eliminarEmpleado(empresaId: String, empleadoId: String, callback: (Boolean, error: String?) -> Unit) {
+            val db = Firebase.firestore
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).update("empleados", FieldValue.arrayRemove(empleadoId))
+                .addOnSuccessListener {
+                    callback(true, null)
+                }
+                .addOnFailureListener { e ->
+                    callback(false, "Error al eliminar empleado: $e")
+                }
+        }
+
 
         init {
             fun crearDatosPrueba() {
