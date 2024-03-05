@@ -10,47 +10,63 @@ class BaseDatosMemoria {
         val empresas = arrayListOf<BEmpresa>()
 
         //Empresas
-        fun crearEmpresa(empresa: BEmpresa){
+        fun crearEmpresa(empresa: BEmpresa) {
             val db = Firebase.firestore
-            empresas.add(empresa)
-        }
-
-        fun buscarEmpresa(empresaId: Int):BEmpresa?{
-            val db = Firebase.firestore
-            val empresa = empresas.getOrNull(empresaId);
-            if(empresa != null){
-                return empresa
-            }else{
-                println("Empresa no encontrada ${empresaId}");
-                return null;
+            val empresasRef = db.collection("empresas")
+            empresa.nombreEmpresa?.let {
+                empresasRef.document(it).set(empresa)
+                    .addOnSuccessListener {
+                        println("Empresa creada exitosamente")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error al crear empresa: $e")
+                    }
             }
         }
 
-        fun actualizarEmpresa(id:Int, empresaActualizada:BEmpresa){
+        fun buscarEmpresa(empresaId: String, callback: (BEmpresa?) -> Unit) {
             val db = Firebase.firestore
-            val empresa = empresas.getOrNull(id);
-            if(empresa != null){
-                println("Empresa seleccionada: $empresa")
-                empresas[id] = empresaActualizada
-                println("Empresa actualizada: $empresaActualizada")
-            }else{
-                println("Empresa no encontrada: ${id}")
-            }
-
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val empresa = document.toObject(BEmpresa::class.java)
+                        callback(empresa)
+                    } else {
+                        println("Empresa no encontrada: $empresaId")
+                        callback(null)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    println("Error al buscar empresa: $e")
+                    callback(null)
+                }
         }
 
-        fun eliminarEmpresa(id:   Int):Boolean{
-            val db = Firebase.firestore
-            val empresa = empresas.getOrNull(id);
-            if(empresa != null){
-                empresas.remove(empresa);
-                println("Empresa eliminada: $empresa");
-                return true;
-            }else{
-                println("Empresa no encontrada ${id}");
-                return false;
-            }
 
+        fun actualizarEmpresa(empresaId: String, empresaActualizada: BEmpresa) {
+            val db = Firebase.firestore
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).set(empresaActualizada)
+                .addOnSuccessListener {
+                    println("Empresa actualizada exitosamente: $empresaActualizada")
+                }
+                .addOnFailureListener { e ->
+                    println("Error al actualizar empresa: $e")
+                }
+        }
+
+
+        fun eliminarEmpresa(empresaId: String) {
+            val db = Firebase.firestore
+            val empresasRef = db.collection("empresas")
+            empresasRef.document(empresaId).delete()
+                .addOnSuccessListener {
+                    println("Empresa eliminada exitosamente: $empresaId")
+                }
+                .addOnFailureListener { e ->
+                    println("Error al eliminar empresa: $e")
+                }
         }
 
         // EMPLEADOS
@@ -111,29 +127,6 @@ class BaseDatosMemoria {
         }
 
         init {
-            empresas.add(
-                BEmpresa(
-                    "Procredit",
-                    99599046,
-                    true,
-                    "Financiera",
-                    empleados = mutableListOf(
-                        BEmpleado(
-                            "Emily",
-                            "Montalvo",
-                            48,
-                            true
-                        ),
-                        BEmpleado(
-                            "John",
-                            "Doe",
-                            30,
-                            true
-                        )
-                    )
-                )
-            )
-
             fun crearDatosPrueba() {
                 val db = Firebase.firestore
 
@@ -145,113 +138,57 @@ class BaseDatosMemoria {
                     "edadEmpleado" to 15,
                     "tiempoCompleto" to true
                 )
+                val empleado2 = hashMapOf(
+                    "nombreEmpleado" to "Camilo",
+                    "apellidoEmpleado" to "Luna",
+                    "edadEmpleado" to 15,
+                    "tiempoCompleto" to true
+                )
+                val empleado3 = hashMapOf(
+                    "nombreEmpleado" to "Indigo",
+                    "apellidoEmpleado" to "Luna",
+                    "edadEmpleado" to 15,
+                    "tiempoCompleto" to true
+                )
 
                 val data1 = hashMapOf(
                     "nombreEmpresa" to "TechCorp",
                     "numeroCelular" to 2891475,
                     "estado" to false,
                     "categoria" to "Tecnologia",
-                    "regions" to listOf(empleado1)
+                    "empleados" to listOf(empleado1, empleado2, empleado3)
                 )
                 empresas.document("TC").set(data1)
 
                 val data2 = hashMapOf(
-                    "name" to "Los Angeles",
-                    "state" to "CA",
-                    "country" to "USA",
-                    "capital" to false,
-                    "population" to 3900000,
-                    "regions" to listOf("west_coast", "socal"),
+                    "nombreEmpresa" to "KFC",
+                    "numeroCelular" to 28914755454,
+                    "estado" to true,
+                    "categoria" to "Finanzas",
+                    "empleados" to listOf(empleado2, empleado3)
                 )
-                empresas.document("LA").set(data2)
+                empresas.document("KFC").set(data2)
 
                 val data3 = hashMapOf(
-                    "name" to "Washington D.C.",
-                    "state" to null,
-                    "country" to "USA",
-                    "capital" to true,
-                    "population" to 680000,
-                    "regions" to listOf("east_coast"),
+                    "nombreEmpresa" to "Pollo Campero",
+                    "numeroCelular" to 2454,
+                    "estado" to true,
+                    "categoria" to "Comida",
+                    "empleados" to listOf(empleado1, empleado3)
                 )
-                empresas.document("DC").set(data3)
+                empresas.document("PC").set(data3)
 
                 val data4 = hashMapOf(
-                    "name" to "Tokyo",
-                    "state" to null,
-                    "country" to "Japan",
-                    "capital" to true,
-                    "population" to 9000000,
-                    "regions" to listOf("kanto", "honshu"),
+                    "nombreEmpresa" to "Pandora",
+                    "numeroCelular" to 24548453,
+                    "estado" to false,
+                    "categoria" to "Accesosrios",
+                    "empleados" to listOf(empleado1, empleado3, empleado2)
                 )
                 empresas.document("TOK").set(data4)
 
-                val data5 = hashMapOf(
-                    "name" to "Beijing",
-                    "state" to null,
-                    "country" to "China",
-                    "capital" to true,
-                    "population" to 21500000,
-                    "regions" to listOf("jingjinji", "hebei"),
-                )
-                empresas.document("BJ").set(data5)
-            }
-            empresas.add(
-                BEmpresa(
-                    "TechCorp",
-                    98765432,
-                    true,
-                    "Tecnología",
-                    empleados = mutableListOf(
-                        BEmpleado(
-                            "Alice",
-                            "Johnson",
-                            25,
-                            true
-                        ),
-                        BEmpleado(
-                            "Bob",
-                            "Smith",
-                            35,
-                            true
-                        ),
-                        BEmpleado(
-                            "Charlie",
-                            "Brown",
-                            28,
-                            true
-                        )
-                    )
-                )
-            )
 
-            empresas.add(
-                BEmpresa(
-                    "FoodExpress",
-                    91234567,
-                    true,
-                    "Alimentación",
-                    empleados = mutableListOf(
-                        BEmpleado(
-                            "Eva",
-                            "Gonzalez",
-                            22,
-                            true
-                        ),
-                        BEmpleado(
-                            "David",
-                            "Clark",
-                            40,
-                            true
-                        ),
-                        BEmpleado(
-                            "Sophia",
-                            "Taylor",
-                            32,
-                            true
-                        )
-                    )
-                )
-            )
+            }
         }
 
     }
