@@ -1,5 +1,8 @@
 package com.example.a04_examenbi
 
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+
 class BaseDatosMemoria {
 
     companion object{
@@ -8,10 +11,12 @@ class BaseDatosMemoria {
 
         //Empresas
         fun crearEmpresa(empresa: BEmpresa){
+            val db = Firebase.firestore
             empresas.add(empresa)
         }
 
         fun buscarEmpresa(empresaId: Int):BEmpresa?{
+            val db = Firebase.firestore
             val empresa = empresas.getOrNull(empresaId);
             if(empresa != null){
                 return empresa
@@ -22,6 +27,7 @@ class BaseDatosMemoria {
         }
 
         fun actualizarEmpresa(id:Int, empresaActualizada:BEmpresa){
+            val db = Firebase.firestore
             val empresa = empresas.getOrNull(id);
             if(empresa != null){
                 println("Empresa seleccionada: $empresa")
@@ -34,6 +40,7 @@ class BaseDatosMemoria {
         }
 
         fun eliminarEmpresa(id:   Int):Boolean{
+            val db = Firebase.firestore
             val empresa = empresas.getOrNull(id);
             if(empresa != null){
                 empresas.remove(empresa);
@@ -43,10 +50,12 @@ class BaseDatosMemoria {
                 println("Empresa no encontrada ${id}");
                 return false;
             }
+
         }
 
         // EMPLEADOS
         fun cargarEmpleados(empresa: BEmpresa):MutableList<BEmpleado>{
+            val db = Firebase.firestore
             var listaEmpleados: MutableList<BEmpleado> = mutableListOf();
             for(id in empresa.empleados.indices){
                 println("${id}: ${empresa.empleados.get(id)}");
@@ -56,6 +65,7 @@ class BaseDatosMemoria {
         }
 
         fun agregarEmpleado(empresaId: Int, empleado: BEmpleado){
+            val db = Firebase.firestore
             val empresa = empresas.getOrNull(empresaId);
             if(empresa != null){
                 empresa.empleados.add(empleado);
@@ -66,6 +76,7 @@ class BaseDatosMemoria {
         }
 
         fun actualizarEmpleado(empresaId: Int,empleadoId: Int, empleadoActualizado: BEmpleado){
+            val db = Firebase.firestore
             val empresa = empresas.getOrNull(empresaId);
             if(empresa != null){
                 val empleado = empresa.empleados.getOrNull(empleadoId);
@@ -81,6 +92,7 @@ class BaseDatosMemoria {
 
 
         fun eliminarEmpleado(empresId:Int, empleadoId:Int ):Boolean{
+            val db = Firebase.firestore
             val empresa = empresas.getOrNull(empresId);
             if(empresa != null){
                 val empleado = empresa.empleados.getOrNull(empleadoId);
@@ -122,6 +134,67 @@ class BaseDatosMemoria {
                 )
             )
 
+            fun crearDatosPrueba() {
+                val db = Firebase.firestore
+
+                val empresas = db.collection("empresas")
+
+                val empleado1 = hashMapOf(
+                    "nombreEmpleado" to "Eva",
+                    "apellidoEmpleado" to "Luna",
+                    "edadEmpleado" to 15,
+                    "tiempoCompleto" to true
+                )
+
+                val data1 = hashMapOf(
+                    "nombreEmpresa" to "TechCorp",
+                    "numeroCelular" to 2891475,
+                    "estado" to false,
+                    "categoria" to "Tecnologia",
+                    "regions" to listOf(empleado1)
+                )
+                empresas.document("TC").set(data1)
+
+                val data2 = hashMapOf(
+                    "name" to "Los Angeles",
+                    "state" to "CA",
+                    "country" to "USA",
+                    "capital" to false,
+                    "population" to 3900000,
+                    "regions" to listOf("west_coast", "socal"),
+                )
+                empresas.document("LA").set(data2)
+
+                val data3 = hashMapOf(
+                    "name" to "Washington D.C.",
+                    "state" to null,
+                    "country" to "USA",
+                    "capital" to true,
+                    "population" to 680000,
+                    "regions" to listOf("east_coast"),
+                )
+                empresas.document("DC").set(data3)
+
+                val data4 = hashMapOf(
+                    "name" to "Tokyo",
+                    "state" to null,
+                    "country" to "Japan",
+                    "capital" to true,
+                    "population" to 9000000,
+                    "regions" to listOf("kanto", "honshu"),
+                )
+                empresas.document("TOK").set(data4)
+
+                val data5 = hashMapOf(
+                    "name" to "Beijing",
+                    "state" to null,
+                    "country" to "China",
+                    "capital" to true,
+                    "population" to 21500000,
+                    "regions" to listOf("jingjinji", "hebei"),
+                )
+                empresas.document("BJ").set(data5)
+            }
             empresas.add(
                 BEmpresa(
                     "TechCorp",
