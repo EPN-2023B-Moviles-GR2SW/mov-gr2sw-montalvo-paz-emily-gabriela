@@ -1,5 +1,4 @@
 package com.debercuatro.netflix
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.fraporitmostech.netflix.R
-import com.fraporitmostech.netflix.databinding.ItemMovieBinding
+import com.fraporitmostech.kotflix.R
+import com.fraporitmostech.kotflix.databinding.ItemMovieBinding
+
 class AdapterMovie(private val movie: List<Movie>, private val listener: OnClickListener)
     :RecyclerView.Adapter<AdapterMovie.ViewHolder>(){
     private  lateinit var context: Context
